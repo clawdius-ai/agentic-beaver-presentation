@@ -1148,7 +1148,7 @@
             </div>
             <img src="beaver-logo.png" alt="Agentic Beaver" style="width: 120px; height: 120px; border-radius: 24px; margin-bottom: 1.5rem;">
             <h1>AI agents:<br>image, content,<br>and <span class="highlight">what's new</span>.</h1>
-            <p class="subtitle">Three things you can do tonight. Plus the platform updates that shipped last month.</p>
+            <p class="subtitle">Two skills, one combo: generate the image, write the post, ship the brand. Plus what shipped last month.</p>
             <div class="hero-cta">
                 <button class="btn btn-primary" onclick="nextSlide()">Start →</button>
                 <button class="btn btn-secondary" onclick="goToSlide(5)">What's New</button>
@@ -1160,72 +1160,47 @@
     <section class="slide" id="slide-2">
         <div class="glow" style="top: 30%; right: 5%;"></div>
         <div class="slide-content">
-            <span class="eyebrow">Use Case 01</span>
+            <span class="eyebrow">Use Case 01 · The Image Skill</span>
             <h2>Stop hiring designers<br>for every <span class="highlight">post</span>.</h2>
-            <p class="subtitle">GPT Image 1, inside your agent. Generate, iterate, ship — without leaving the chat.</p>
+            <p class="subtitle">One skill. ChatGPT Images 2.0 inside your agent. Generate, iterate, ship — without leaving the chat or paying per image.</p>
 
-            <div class="two-col" style="margin-top: 2rem;">
-                <div>
-                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Pre-baked Samples</h4>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.5rem;">
-                        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
-                            <img src="prebakes/prebake-linkedin.png" alt="LinkedIn carousel cover" style="width: 100%; height: auto; display: block;">
-                            <div style="padding: 0.5rem; text-align: center; font-size: 0.7rem; color: var(--text-muted); border-top: 1px solid var(--border);">LinkedIn · 1672×941</div>
-                        </div>
-                        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
-                            <img src="prebakes/prebake-instagram.png" alt="Instagram square post" style="width: 100%; height: auto; display: block;">
-                            <div style="padding: 0.5rem; text-align: center; font-size: 0.7rem; color: var(--text-muted); border-top: 1px solid var(--border);">Instagram · 1254×1254</div>
-                        </div>
-                        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
-                            <img src="prebakes/prebake-twitter.png" alt="X/Twitter post" style="width: 100%; height: auto; display: block;">
-                            <div style="padding: 0.5rem; text-align: center; font-size: 0.7rem; color: var(--text-muted); border-top: 1px solid var(--border);">X / Twitter · 1672×941</div>
-                        </div>
-                    </div>
+            <div class="skill-card ready" style="margin-top: 1.5rem; max-width: 900px;">
+                <div class="skill-header">
+                    <span class="skill-name">🪞 gpt-image-2 — ChatGPT Images 2.0</span>
+                    <span class="skill-status ready">Installed</span>
+                </div>
+                <div class="skill-desc" style="margin-bottom: 0.75rem;">Text-to-image, image-to-image, style transfer, multi-reference composition. Runs through the user's existing ChatGPT Plus/Pro subscription — no separate OpenAI key, no per-image billing. <em>(agentspace-so/agent-skills)</em></div>
+                <div class="code-block" style="margin-top: 0.75rem; font-size: 0.75rem; padding: 0.75rem;"><pre>npx skills add https://github.com/agentspace-so/agent-skills --skill gpt-image-2</pre></div>
+            </div>
 
-                    <div class="framework-box">
-                        <h4>Why gpt-image-1</h4>
-                        <ul class="framework-list">
-                            <li><strong>Renders text accurately</strong> — headlines, taglines, no garbled letters</li>
-                            <li><strong>Follows brand prompts</strong> — color palette, layout, style stays consistent</li>
-                            <li><strong>One-shot quality</strong> — usable on first generation, no 20-prompt cycles</li>
-                        </ul>
+            <h4 style="color: var(--text-muted); margin: 2rem 0 1rem;">Generated on this deck — for tonight's demo</h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                    <img src="prebakes/prebake-linkedin.png" alt="LinkedIn carousel cover" style="width: 100%; height: auto; display: block;">
+                    <div style="padding: 0.6rem 0.75rem; border-top: 1px solid var(--border);">
+                        <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 0.15rem;">LinkedIn carousel</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">1672 × 941 · 1.1 MB · 90s</div>
                     </div>
                 </div>
-
-                <div>
-                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">How your agent calls it</h4>
-                    <div class="code-block" style="margin-top: 0;">
-<pre><span class="code-keyword">await</span> <span class="code-function">image.create</span>({
-  <span class="code-keyword">prompt</span>: <span class="code-string">"LinkedIn carousel cover —
-    dark charcoal bg, orange accent,
-    bold white headline: '5 questions
-    every founder asks ChatGPT'.
-    Premium editorial layout."</span>,
-  <span class="code-keyword">model</span>: <span class="code-string">"gpt-image-1"</span>,
-  <span class="code-keyword">size</span>: <span class="code-string">"1536x1024"</span>,
-  <span class="code-keyword">quality</span>: <span class="code-string">"high"</span>
-});
-<span class="code-comment">// → saved to your workspace,
-// → ready to post.</span></pre>
-                    </div>
-
-                    <div class="terminal" style="margin-top: 1.5rem;">
-                        <div class="terminal-header">
-                            <span class="terminal-dot red"></span>
-                            <span class="terminal-dot yellow"></span>
-                            <span class="terminal-dot green"></span>
-                        </div>
-                        <div class="terminal-body">
-                            <div class="terminal-line"><span class="terminal-prompt">you:</span> "make me a banner for tonight's post"</div>
-                            <div class="terminal-line terminal-output">🎨 generating gpt-image-1 (1536×1024)...</div>
-                            <div class="terminal-line terminal-output">✅ saved → banner-2026-06-04.png</div>
-                            <div class="terminal-line"><span class="terminal-prompt">you:</span> "make the orange brighter"</div>
-                            <div class="terminal-line terminal-output">🎨 regenerating with edit...</div>
-                            <div class="terminal-line terminal-output">✅ v2 ready</div>
-                            <div class="terminal-line"><span class="terminal-prompt">you:</span> "ship it"</div>
-                        </div>
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                    <img src="prebakes/prebake-instagram.png" alt="Instagram square post" style="width: 100%; height: auto; display: block;">
+                    <div style="padding: 0.6rem 0.75rem; border-top: 1px solid var(--border);">
+                        <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 0.15rem;">Instagram square</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">1254 × 1254 · 1.5 MB · 60s</div>
                     </div>
                 </div>
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                    <img src="prebakes/prebake-twitter.png" alt="X/Twitter post" style="width: 100%; height: auto; display: block;">
+                    <div style="padding: 0.6rem 0.75rem; border-top: 1px solid var(--border);">
+                        <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 0.15rem;">X / Twitter post</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">1672 × 941 · 0.6 MB · 30s</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.25rem 1.5rem; background: linear-gradient(135deg, rgba(244, 107, 67, 0.12), transparent); border: 1px solid var(--accent); border-radius: 12px;">
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Next →</div>
+                <div style="font-size: 1.05rem; font-weight: 500;">Pair this with the <strong style="color: var(--accent);">social-content skill</strong> and you get a whole social brand running from one prompt.</div>
             </div>
         </div>
     </section>
@@ -1234,87 +1209,97 @@
     <section class="slide" id="slide-3">
         <div class="glow" style="bottom: 20%; left: 15%;"></div>
         <div class="slide-content">
-            <span class="eyebrow">Use Case 02</span>
-            <h2>From idea to published,<br>in <span class="highlight">one prompt</span>.</h2>
-            <p class="subtitle">A whole social brand — image, caption, scheduling — without leaving the agent.</p>
+            <span class="eyebrow">Use Case 02 · The Combo</span>
+            <h2>Two skills =<br>a whole <span class="highlight">social brand</span>.</h2>
+            <p class="subtitle">Pair the image skill with social-content. Topic in. Captioned, visualized, scheduled content out. Same chat window.</p>
 
             <div class="integration-flow" style="margin: 2rem 0 2.5rem;">
                 <div class="integration-node">💡 Topic</div>
                 <span class="integration-arrow">→</span>
-                <div class="integration-node highlight">social skill</div>
+                <div class="integration-node highlight">🪞 gpt-image-2</div>
+                <span class="integration-arrow">+</span>
+                <div class="integration-node highlight">✍️ social-content</div>
                 <span class="integration-arrow">→</span>
-                <div class="integration-node highlight">image gen</div>
+                <div class="integration-node highlight">📤 social-publisher</div>
                 <span class="integration-arrow">→</span>
-                <div class="integration-node highlight">social-publisher</div>
-                <span class="integration-arrow">→</span>
-                <div class="integration-node">📤 Live</div>
+                <div class="integration-node">📅 Scheduled</div>
             </div>
 
             <div class="two-col">
                 <div>
-                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Two skills, working together</h4>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">The two skills, side by side</h4>
 
-                    <div class="skill-card ready">
+                    <div class="skill-card ready" style="margin-bottom: 1rem;">
                         <div class="skill-header">
-                            <span class="skill-name">✍️ social</span>
-                            <span class="skill-status ready">Writes</span>
+                            <span class="skill-name">🪞 gpt-image-2</span>
+                            <span class="skill-status ready">Visual</span>
                         </div>
-                        <div class="skill-desc">Drafts platform-tailored copy. LinkedIn long-form, X threads, IG captions, FB posts. Hook-driven, on-brand, no fluff. <em>(coreyhaines31/marketingskills)</em></div>
+                        <div class="skill-desc">Generates the post graphic — right aspect ratio per platform. Square for IG, wide for LinkedIn, 16:9 for X. (See slide 02 for live examples.)</div>
                     </div>
 
-                    <div class="skill-card ready">
+                    <div class="skill-card ready" style="margin-bottom: 1rem;">
+                        <div class="skill-header">
+                            <span class="skill-name">✍️ social-content</span>
+                            <span class="skill-status ready">Copy</span>
+                        </div>
+                        <div class="skill-desc">Drafts platform-tailored captions. LinkedIn long-form, X threads, IG hooks, FB posts. Tone-matched, hook-driven. <em>(coreyhaines31/marketingskills)</em></div>
+                    </div>
+
+                    <div class="skill-card partial">
                         <div class="skill-header">
                             <span class="skill-name">📤 social-publisher</span>
-                            <span class="skill-status ready">Ships</span>
+                            <span class="skill-status partial">Distribution</span>
                         </div>
-                        <div class="skill-desc">Cross-platform publisher. LinkedIn, X, IG, FB, TikTok — one call, schedules or sends now. <em>(claude-office-skills/skills)</em></div>
+                        <div class="skill-desc">Optional final step: cross-posts and schedules to LinkedIn, X, IG, FB, TikTok in one call. <em>(claude-office-skills/skills)</em></div>
                     </div>
 
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 3px solid var(--accent); font-size: 0.9rem;">
-                        <strong style="color: var(--accent);">Install once:</strong>
-                        <div class="code-block" style="margin-top: 0.5rem; padding: 0.75rem; font-size: 0.75rem;"><pre>npx skills add coreyhaines31/marketingskills --skill social
+                    <div style="margin-top: 1.25rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 3px solid var(--accent); font-size: 0.85rem;">
+                        <strong style="color: var(--accent);">Install all three:</strong>
+                        <div class="code-block" style="margin-top: 0.5rem; padding: 0.6rem; font-size: 0.7rem;"><pre>npx skills add agentspace-so/agent-skills --skill gpt-image-2
+npx skills add coreyhaines31/marketingskills --skill social-content
 npx skills add claude-office-skills/skills --skill social-publisher</pre></div>
                     </div>
                 </div>
 
                 <div>
-                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">The full workflow</h4>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">What you say · what happens</h4>
                     <div class="workflow-diagram" style="margin: 0;">
                         <div class="workflow-step-box">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                <strong>You give a topic</strong>
-                                <span>"new feature dropped, post about it on LinkedIn + X + IG"</span>
+                                <strong>You: one prompt</strong>
+                                <span>"post about the new Claude Max install on LinkedIn, X, and IG"</span>
                             </div>
                         </div>
                         <div class="workflow-arrow">↓</div>
                         <div class="workflow-step-box">
                             <div class="step-number">2</div>
                             <div class="step-content">
-                                <strong>social skill drafts copy</strong>
-                                <span>One version per platform, tone-matched to each</span>
+                                <strong>social-content drafts 3 captions</strong>
+                                <span>LinkedIn long-form, X thread, IG hook — each tone-matched</span>
                             </div>
                         </div>
                         <div class="workflow-arrow">↓</div>
                         <div class="workflow-step-box">
                             <div class="step-number">3</div>
                             <div class="step-content">
-                                <strong>image gen produces visual</strong>
-                                <span>Right aspect ratio per platform — square, wide, vertical</span>
+                                <strong>gpt-image-2 generates 3 visuals</strong>
+                                <span>1672×941 LinkedIn, 1672×941 X, 1254×1254 IG — brand-consistent</span>
                             </div>
                         </div>
                         <div class="workflow-arrow">↓</div>
                         <div class="workflow-step-box">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <strong>social-publisher ships it</strong>
-                                <span>Schedules or posts now to every connected account</span>
+                                <strong>social-publisher schedules everything</strong>
+                                <span>One call. Live across every account. Done in under 5 minutes.</span>
                             </div>
                         </div>
                     </div>
 
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: linear-gradient(135deg, rgba(244, 107, 67, 0.1), transparent); border: 1px solid var(--accent); border-radius: 12px; font-size: 0.9rem;">
-                        <strong style="color: var(--accent);">The point:</strong> a whole social brand runs from the same chat window. Image, caption, posting — agent does all of it.
+                    <div style="margin-top: 1.5rem; padding: 1.25rem 1.5rem; background: linear-gradient(135deg, rgba(244, 107, 67, 0.12), transparent); border: 1px solid var(--accent); border-radius: 12px;">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">The point</div>
+                        <div style="font-size: 0.95rem; font-weight: 500; line-height: 1.5;">You stop being the bottleneck. The agent runs your social. You approve, it ships.</div>
                     </div>
                 </div>
             </div>
@@ -1411,12 +1396,12 @@ npx skills add claude-office-skills/skills --skill social-publisher</pre></div>
                 <div class="feature-card" style="text-align: left;">
                     <div class="feature-icon">2️⃣</div>
                     <h3>Install a skill</h3>
-                    <p><code style="background: var(--bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85rem;">npx skills add</code> — start with <strong>social</strong> + <strong>social-publisher</strong>.</p>
+                    <p>Add <strong>gpt-image-2</strong> + <strong>social-content</strong>. <code style="background: var(--bg-tertiary); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.8rem;">npx skills add</code> handles it.</p>
                 </div>
                 <div class="feature-card" style="text-align: left;">
                     <div class="feature-icon">3️⃣</div>
                     <h3>Make something</h3>
-                    <p>Pick a topic. Tell the agent. Image, caption, posted — across every platform.</p>
+                    <p>Pick a topic. Tell the agent. Image + caption out — across every platform.</p>
                 </div>
             </div>
 
