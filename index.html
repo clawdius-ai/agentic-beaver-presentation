@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Beaver — AI Agents in Production</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Agentic Beaver Brand System */
+            --bg-primary: hsl(0, 0%, 4%);
+            --bg-secondary: hsl(0, 0%, 7%);
+            --bg-tertiary: hsl(0, 0%, 10%);
+            --accent: #F46B43;
+            --accent-secondary: #f8845f;
+            --accent-glow: rgba(244, 107, 67, 0.3);
+            --text-primary: hsl(0, 0%, 100%);
+            --text-secondary: hsl(15, 5%, 65%);
+            --text-muted: hsl(15, 5%, 55%);
+            --border: hsl(15, 8%, 22%);
+            --gradient-start: #F46B43;
+            --gradient-end: #f8a060;
+            --green: #22c55e;
+            --yellow: #eab308;
+            --blue: #3b82f6;
+
+            /* Typography */
+            --font-display: 'Instrument Serif', serif;
+            --font-body: 'Satoshi', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .slide-counter {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Slides */
+        .slide {
+            min-height: 100vh;
+            padding: 6rem 4rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .slide.active .slide-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typography */
+        .eyebrow {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-family: var(--font-body);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        h4 {
+            font-family: var(--font-body);
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+
+        .highlight {
+            color: var(--accent);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            align-items: center;
+        }
+
+        .hero .slide-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero h1 {
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 50%, var(--text-primary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--text-muted);
+        }
+
+        /* Pipeline Slide */
+        .pipeline {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pipeline-step {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            flex: 1;
+            min-width: 140px;
+            max-width: 180px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pipeline-step:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.25rem;
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .pipeline-icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pipeline-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .pipeline-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .code-comment { color: var(--text-muted); }
+        .code-keyword { color: #ff79c6; }
+        .code-string { color: #f1fa8c; }
+        .code-function { color: #8be9fd; }
+        .code-variable { color: #50fa7b; }
+
+        /* Demo Terminal */
+        .terminal {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .terminal-header {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
+
+        .terminal-body {
+            padding: 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
+
+        .terminal-line {
+            opacity: 0;
+            animation: typeLine 0.5s ease forwards;
+        }
+
+        .terminal-line:nth-child(1) { animation-delay: 0.2s; }
+        .terminal-line:nth-child(2) { animation-delay: 0.6s; }
+        .terminal-line:nth-child(3) { animation-delay: 1s; }
+        .terminal-line:nth-child(4) { animation-delay: 1.4s; }
+        .terminal-line:nth-child(5) { animation-delay: 1.8s; }
+        .terminal-line:nth-child(6) { animation-delay: 2.2s; }
+        .terminal-line:nth-child(7) { animation-delay: 2.6s; }
+        .terminal-line:nth-child(8) { animation-delay: 3s; }
+
+        @keyframes typeLine {
+            to { opacity: 1; }
+        }
+
+        .terminal-prompt {
+            color: var(--accent);
+        }
+
+        .terminal-output {
+            color: var(--text-secondary);
+            padding-left: 1rem;
+        }
+
+        /* Two Column */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1100px) {
+            .three-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Skill Cards */
+        .skill-section {
+            margin-bottom: 2rem;
+        }
+
+        .skill-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .skill-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+        }
+
+        .skill-card.ready::before {
+            background: var(--green);
+        }
+
+        .skill-card.partial::before {
+            background: var(--yellow);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .skill-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .skill-status.ready {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--green);
+        }
+
+        .skill-status.partial {
+            background: rgba(234, 179, 8, 0.15);
+            color: var(--yellow);
+        }
+
+        .skill-desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Tool Cards */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .tool-logo {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-type {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Framework Box */
+        .framework-box {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .framework-box h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .framework-list {
+            list-style: none;
+        }
+
+        .framework-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .framework-list li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Email Preview */
+        .email-preview {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .email-header {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .email-field {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .email-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .email-label {
+            color: var(--text-muted);
+            min-width: 60px;
+        }
+
+        .email-body {
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .email-body .personalized {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Quote */
+        .quote {
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            max-width: 600px;
+        }
+
+        .quote-author {
+            font-size: 0.9rem;
+            font-style: normal;
+            margin-top: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta-slide {
+            text-align: center;
+            align-items: center;
+        }
+
+        .cta-slide .slide-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Keyboard Navigation Hint */
+        .nav-hint {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .key {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-family: monospace;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            z-index: 1001;
+            transition: width 0.3s ease;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Glow effect */
+        .glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Live Demo Tag */
+        .live-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Metric Table */
+        .metric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .metric-table th, .metric-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .metric-table th {
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-table td:first-child {
+            font-weight: 500;
+        }
+
+        /* Integration Flow */
+        .integration-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .integration-node {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .integration-node.highlight {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, var(--bg-secondary), rgba(255, 68, 68, 0.1));
+        }
+
+        .integration-arrow {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+        }
+
+        /* Demo Cards */
+        .demo-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .demo-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.15);
+        }
+
+        .demo-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .demo-label {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .demo-card:hover .demo-hint {
+            color: var(--accent);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .modal-content.wide {
+            max-width: 1400px;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Workflow Diagram */
+        .workflow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .workflow-diagram.horizontal {
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .workflow-node {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .workflow-node.start {
+            border-color: var(--blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .workflow-node.end {
+            border-color: var(--green);
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .workflow-arrow {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+        }
+
+        .workflow-step-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content strong {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-tools {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .tool-tag {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Pipeline Stage (for horizontal diagram) */
+        .pipeline-stage {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem;
+            min-width: 120px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .stage-header {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .stage-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .mini-step {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .stage-tool {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .pipeline-arrow {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 5rem 1.5rem 2rem;
+            }
+            
+            .nav {
+                padding: 1rem;
+            }
+
+            .pipeline-step::after {
+                display: none;
+            }
+
+            .nav-hint {
+                display: none;
+            }
+
+            .integration-arrow {
+                transform: rotate(90deg);
+            }
+
+            .modal-content.wide {
+                max-width: 100%;
+            }
+
+            .workflow-diagram.horizontal {
+                flex-direction: column;
+            }
+
+            .pipeline-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-icon"><img src="beaver-logo.png" alt="Agentic Beaver" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"></div>
+            <span>Agentic Beaver</span>
+        </div>
+        <div class="slide-counter">
+            <span id="currentSlide">01</span> / <span id="totalSlides">12</span>
+        </div>
+    </nav>
+
+    <!-- Slide 1: Hero -->
+    <section class="slide hero active" id="slide-1">
+        <div class="glow" style="top: 20%; left: 10%;"></div>
+        <div class="slide-content">
+            <div class="live-tag">
+                <span class="live-dot"></span>
+                Live Demo Session
+            </div>
+            <img src="beaver-logo.png" alt="Agentic Beaver" style="width: 120px; height: 120px; border-radius: 24px; margin-bottom: 1.5rem;">
+            <h1>AI Agents<br>in Production</h1>
+            <p class="subtitle">From chatbot to coworker. Real workflows, real automation, real results.</p>
+            <div class="hero-cta">
+                <button class="btn btn-primary" onclick="nextSlide()">See Use Cases →</button>
+                <button class="btn btn-secondary" onclick="goToSlide(11)">Live Demo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 2: The Problem -->
+    <section class="slide" id="slide-2">
+        <div class="slide-content">
+            <span class="eyebrow">The Problem</span>
+            <h2>ChatGPT is a calculator.<br>You need a <span class="highlight">coworker</span>.</h2>
+            <p class="subtitle">AI chatbots answer questions. But business needs someone who can:</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Schedule & Remember</h3>
+                    <p>Set reminders, check calendars, follow up automatically without being asked.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Use Your Tools</h3>
+                    <p>Connect to CRMs, email, Slack, GitHub — actually do work, not just talk about it.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Run Workflows</h3>
+                    <p>Execute multi-step processes: research → enrich → write → send → follow up.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Learn & Adapt</h3>
+                    <p>Remember context, preferences, and history across sessions. Actually know you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: The Solution Overview -->
+    <section class="slide" id="slide-3">
+        <div class="slide-content">
+            <span class="eyebrow">The Solution</span>
+            <h2>Agentic Beaver: Your AI<br><span class="highlight">operating system</span></h2>
+            <p class="subtitle">A platform that gives Claude (or any LLM) a body — tools, memory, and agency.</p>
+            
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">🔍</div>
+                    <div class="pipeline-title">SCRAPE</div>
+                    <div class="pipeline-desc">Skool, LinkedIn</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">📧</div>
+                    <div class="pipeline-title">ENRICH</div>
+                    <div class="pipeline-desc">Find emails</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">💾</div>
+                    <div class="pipeline-title">CRM</div>
+                    <div class="pipeline-desc">Add to Attio</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">🔬</div>
+                    <div class="pipeline-title">RESEARCH</div>
+                    <div class="pipeline-desc">Deep dive</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">✍️</div>
+                    <div class="pipeline-title">WRITE</div>
+                    <div class="pipeline-desc">Personalize</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon">🚀</div>
+                    <div class="pipeline-title">SEND</div>
+                    <div class="pipeline-desc">Launch</div>
+                </div>
+            </div>
+
+            <div class="stats-grid" style="margin-top: 3rem;">
+                <div class="stat-card">
+                    <div class="stat-value">357</div>
+                    <div class="stat-label">Leads Scraped</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Email Hit Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5min</div>
+                    <div class="stat-label">Per Lead Research</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">133</div>
+                    <div class="stat-label">Leads in CRM</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Lead Generation Skills -->
+    <section class="slide" id="slide-4">
+        <div class="slide-content">
+            <span class="eyebrow">Phase 1</span>
+            <h2>Lead <span class="highlight">Generation</span></h2>
+            <p class="subtitle">Skills that find and qualify your targets.</p>
+            
+            <div class="two-col">
+                <div>
+                    <div class="skill-section">
+                        <div class="skill-card ready">
+                            <div class="skill-header">
+                                <span class="skill-name">🔍 scrape-skill</span>
+                                <span class="skill-status ready">✅ Ready</span>
+                            </div>
+                            <div class="skill-desc">Skool scraper working. Pulled 357 leads from Money category. Extracts community name, member count, owner info, pricing.</div>
+                        </div>
+
+                        <div class="skill-card ready">
+                            <div class="skill-header">
+                                <span class="skill-name">📧 enrich</span>
+                                <span class="skill-status ready">✅ Ready</span>
+                            </div>
+                            <div class="skill-desc">FullEnrich integration. 39.8% hit rate. 349.5 credits remaining. Falls back to Lemlist bulk enrich API.</div>
+                        </div>
+
+                        <div class="skill-card ready">
+                            <div class="skill-header">
+                                <span class="skill-name">💾 add-to-crm</span>
+                                <span class="skill-status ready">✅ Ready</span>
+                            </div>
+                            <div class="skill-desc">Attio API configured. 133 leads imported to "💰 Skool Money" list. Syncs member count, LTV, stage.</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="terminal-line"><span class="terminal-prompt">$</span> scrape skool "money" --pages 5</div>
+                            <div class="terminal-line terminal-output">🔍 Scraping Skool communities...</div>
+                            <div class="terminal-line terminal-output">📊 Found 357 communities</div>
+                            <div class="terminal-line terminal-output">💾 Saved to leads.csv</div>
+                            <div class="terminal-line"><span class="terminal-prompt">$</span> enrich leads.csv --fullenrich</div>
+                            <div class="terminal-line terminal-output">📧 Enriching 357 leads...</div>
+                            <div class="terminal-line terminal-output">✅ Found 142 emails (39.8%)</div>
+                            <div class="terminal-line"><span class="terminal-prompt">$</span> attio import enriched.csv</div>
+                            <div class="terminal-line terminal-output">✅ 133 leads added to Attio</div>
+                        </div>
+                    </div>
+
+                    <table class="metric-table" style="margin-top: 1.5rem;">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Total Scraped</td>
+                                <td>357 leads</td>
+                            </tr>
+                            <tr>
+                                <td>Emails Found</td>
+                                <td>142 (39.8%)</td>
+                            </tr>
+                            <tr>
+                                <td>FullEnrich Credits</td>
+                                <td>349.5 remaining</td>
+                            </tr>
+                            <tr>
+                                <td>CRM Imported</td>
+                                <td>133 leads</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Outreach Skills -->
+    <section class="slide" id="slide-5">
+        <div class="slide-content">
+            <span class="eyebrow">Phase 2</span>
+            <h2>Personalized <span class="highlight">Outreach</span></h2>
+            <p class="subtitle">Skills that research, write, and send.</p>
+            
+            <div class="two-col">
+                <div>
+                    <div class="skill-section">
+                        <div class="skill-card partial">
+                            <div class="skill-header">
+                                <span class="skill-name">🔬 research</span>
+                                <span class="skill-status partial">🔶 Partial</span>
+                            </div>
+                            <div class="skill-desc">SKILL.md done. Deep research via Tavily + YouTube scraping. Needs integration testing with n8n webhook for batch processing.</div>
+                        </div>
+
+                        <div class="skill-card ready">
+                            <div class="skill-header">
+                                <span class="skill-name">✍️ cold-email</span>
+                                <span class="skill-status ready">✅ Ready</span>
+                            </div>
+                            <div class="skill-desc">Copy frameworks from Lemlist & Instantly. 50-75 word templates. A/B structure built-in. Pattern-interrupt openers.</div>
+                        </div>
+
+                        <div class="skill-card partial">
+                            <div class="skill-header">
+                                <span class="skill-name">🚀 send (Lemlist)</span>
+                                <span class="skill-status partial">🔶 Partial</span>
+                            </div>
+                            <div class="skill-desc">API docs integrated. Campaign creation, lead upload, sequence steps. Needs live campaign test.</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 0.5rem;">Research → Write Flow</h4>
+                    <div class="integration-flow" style="margin: 1rem 0; justify-content: flex-start;">
+                        <div class="integration-node">Lead</div>
+                        <span class="integration-arrow">→</span>
+                        <div class="integration-node highlight">Research Skill</div>
+                        <span class="integration-arrow">→</span>
+                        <div class="integration-node">Briefing</div>
+                        <span class="integration-arrow">→</span>
+                        <div class="integration-node highlight">Cold Email Skill</div>
+                        <span class="integration-arrow">→</span>
+                        <div class="integration-node">Copy</div>
+                    </div>
+
+                    <div class="framework-box">
+                        <h4>Cold Email Frameworks</h4>
+                        <ul class="framework-list">
+                            <li><strong>PAS</strong> — Problem → Agitate → Solution</li>
+                            <li><strong>QVC</strong> — Question → Value → CTA</li>
+                            <li><strong>BAB</strong> — Before → After → Bridge</li>
+                            <li><strong>AIDA</strong> — Attention → Interest → Desire → Action</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; font-size: 0.85rem;">
+                        <strong style="color: var(--accent);">Rule:</strong> 75 words max. Every word earns its place.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: The Tool Stack -->
+    <section class="slide" id="slide-6">
+        <div class="slide-content">
+            <span class="eyebrow">The Stack</span>
+            <h2>Tools that <span class="highlight">power</span> the pipeline</h2>
+            <p class="subtitle">APIs and integrations orchestrated by Agentic Beaver.</p>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-logo">🎯</div>
+                    <div class="tool-name">Attio</div>
+                    <div class="tool-type">CRM</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-logo">📧</div>
+                    <div class="tool-name">Lemlist</div>
+                    <div class="tool-type">Email Sequences</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-logo">🔍</div>
+                    <div class="tool-name">FullEnrich</div>
+                    <div class="tool-type">Email Finding</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-logo">🧱</div>
+                    <div class="tool-name">Clay</div>
+                    <div class="tool-type">Data Enrichment</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-logo">🌐</div>
+                    <div class="tool-name">Tavily</div>
+                    <div class="tool-type">Web Research</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-logo">⚡</div>
+                    <div class="tool-name">n8n</div>
+                    <div class="tool-type">Workflow Automation</div>
+                </div>
+            </div>
+
+            <div class="two-col" style="margin-top: 3rem;">
+                <div>
+                    <h3>Data Flow</h3>
+                    <div class="code-block">
+                        <pre><span class="code-comment"># Lead Gen</span>
+<span class="code-function">Skool</span> → scrape → <span class="code-variable">leads.csv</span>
+<span class="code-variable">leads.csv</span> → <span class="code-function">FullEnrich</span> → emails
+emails → <span class="code-function">Attio</span> → CRM
+
+<span class="code-comment"># Outreach</span>
+lead → <span class="code-function">Tavily</span> + <span class="code-function">YouTube</span> → briefing
+briefing → <span class="code-function">cold-email</span> → copy
+copy → <span class="code-function">Lemlist</span> → send</pre>
+                    </div>
+                </div>
+                <div>
+                    <h3>n8n Workflows</h3>
+                    <div class="skill-card ready" style="margin-top: 1rem;">
+                        <div class="skill-header">
+                            <span class="skill-name">Cold Outreach Stuff</span>
+                        </div>
+                        <div class="skill-desc">Main workflow: form trigger → process leads → emails → report</div>
+                    </div>
+                    <div class="skill-card ready">
+                        <div class="skill-header">
+                            <span class="skill-name">Scrape His Socials</span>
+                        </div>
+                        <div class="skill-desc">Sub-workflow: Apify YouTube scraping for transcripts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 7: Research Skill Deep Dive -->
+    <section class="slide" id="slide-7">
+        <div class="slide-content">
+            <span class="eyebrow">Deep Dive</span>
+            <h2>The <span class="highlight">Research</span> Skill</h2>
+            <p class="subtitle">Replaces manual Gemini sessions. Produces strategic briefings with actionable hooks.</p>
+            
+            <div class="two-col">
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Input</h4>
+                    <div class="code-block" style="margin-top: 0;">
+                        <pre><span class="code-keyword">lead_name:</span> <span class="code-string">"Alex Hormozi"</span>
+<span class="code-keyword">company:</span> <span class="code-string">"Acquisition.com"</span>
+<span class="code-keyword">youtube_url:</span> <span class="code-string">"@AlexHormozi"</span>
+<span class="code-keyword">context:</span> <span class="code-string">"AI retention for course creators"</span></pre>
+                    </div>
+                    
+                    <h4 style="color: var(--text-muted); margin: 1.5rem 0 0.5rem;">Process</h4>
+                    <ul style="list-style: none; font-size: 0.9rem;">
+                        <li style="padding: 0.4rem 0; color: var(--text-secondary);">✓ <strong>Tavily search:</strong> background, news, interviews</li>
+                        <li style="padding: 0.4rem 0; color: var(--text-secondary);">✓ <strong>YouTube scrape:</strong> recent videos + transcripts (Apify)</li>
+                        <li style="padding: 0.4rem 0; color: var(--text-secondary);">✓ <strong>Content analysis:</strong> values, philosophy, communication style</li>
+                        <li style="padding: 0.4rem 0; color: var(--text-secondary);">✓ <strong>Hook generation:</strong> 3+ actionable openers</li>
+                    </ul>
+
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 3px solid var(--accent);">
+                        <strong style="font-size: 0.85rem;">API: Tavily</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">search_depth: "advanced" | include_answer: true</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Output: Strategic Briefing</h4>
+                    <div class="code-block" style="font-size: 0.75rem; margin-top: 0;">
+                        <pre><span class="code-comment"># Alex Hormozi — Account Briefing</span>
+
+<span class="code-keyword">## Philosophy</span>
+"Give away the secrets, sell the implementation"
+Anti-guru, proof-focused, aggressive transparency
+
+<span class="code-keyword">## Top Hooks</span>
+1. Reference <span class="code-string">"$100M Offers"</span> framework
+2. Lead with numbers (he respects data)
+3. Connect to <span class="code-string">"volume negates luck"</span>
+
+<span class="code-keyword">## Don't Say</span>
+- Fluffy language, vague promises
+- "Just wanted to reach out"
+- Generic AI buzzwords
+
+<span class="code-keyword">## Quote to Use</span>
+<span class="code-string">"Most people need to hear you're not 
+working hard enough"</span>
+
+<span class="code-keyword">## Suggested Opener</span>
+<span class="code-string">"Your breakdown on retention curves — 
+most programs we see: 15% finish rate..."</span></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 8: Cold Email Skill Deep Dive -->
+    <section class="slide" id="slide-8">
+        <div class="slide-content">
+            <span class="eyebrow">Deep Dive</span>
+            <h2>The <span class="highlight">Cold Email</span> Skill</h2>
+            <p class="subtitle">Inspired by Lemlist & Instantly. Short, punchy, personalized.</p>
+            
+            <div class="two-col">
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Core Rules</h4>
+                    <div class="framework-box" style="margin-top: 0;">
+                        <ul class="framework-list">
+                            <li><strong>75 words max</strong> — Every word earns its place</li>
+                            <li><strong>No generic openers</strong> — Skip "Hey, reaching out..."</li>
+                            <li><strong>Specific > vague</strong> — "267k members = ~$80K" beats "$50K-$300K"</li>
+                            <li><strong>One clear CTA</strong> — "Want me to show you?"</li>
+                            <li><strong>Pattern interrupt</strong> — First line stops the scroll</li>
+                        </ul>
+                    </div>
+
+                    <h4 style="color: var(--text-muted); margin: 1.5rem 0 0.5rem;">5-Email Sequence</h4>
+                    <table class="metric-table" style="margin-top: 0;">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Day</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>0</td><td>Hook + Problem</td></tr>
+                            <tr><td>2</td><td>3</td><td>Value + Proof</td></tr>
+                            <tr><td>3</td><td>7</td><td>Social Proof</td></tr>
+                            <tr><td>4</td><td>10</td><td>Risk/FOMO</td></tr>
+                            <tr><td>5</td><td>14</td><td>Hail Mary</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Example Output</h4>
+                    <div class="email-preview">
+                        <div class="email-header">
+                            <div class="email-field">
+                                <span class="email-label">To:</span>
+                                <span>alex@acquisition.com</span>
+                            </div>
+                            <div class="email-field">
+                                <span class="email-label">Subject:</span>
+                                <span><span class="personalized">Alex</span> — quick question about <span class="personalized">Gym Launch</span></span>
+                            </div>
+                        </div>
+                        <div class="email-body">
+                            <span class="personalized">Alex</span> — watched your breakdown on retention curves.<br><br>
+                            
+                            Most programs we see: <strong>15% finish rate</strong>. The rest ghost after week 2.<br><br>
+                            
+                            With <span class="personalized">267k members</span>, that's roughly <strong>$80K</strong> sitting on the table.<br><br>
+                            
+                            We built something that changes that. No fluff — just AI that keeps people engaged 24/7.<br><br>
+                            
+                            Worth a 10-min call to see if it fits?
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); text-align: right;">
+                        Word count: 67 ✓
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 9: Lemlist Integration -->
+    <section class="slide" id="slide-9">
+        <div class="slide-content">
+            <span class="eyebrow">Integration</span>
+            <h2><span class="highlight">Lemlist</span> API</h2>
+            <p class="subtitle">Campaign creation, lead upload, sequence automation.</p>
+            
+            <div class="two-col">
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Key Endpoints</h4>
+                    <div class="code-block" style="margin-top: 0; font-size: 0.8rem;">
+                        <pre><span class="code-comment"># Base: https://api.lemlist.com/api</span>
+<span class="code-comment"># Auth: Basic (empty user, API key as pass)</span>
+
+<span class="code-keyword">GET</span>  /campaigns          <span class="code-comment"># List all</span>
+<span class="code-keyword">POST</span> /campaigns          <span class="code-comment"># Create new</span>
+<span class="code-keyword">POST</span> /campaigns/{id}/leads   <span class="code-comment"># Add lead</span>
+<span class="code-keyword">POST</span> /campaigns/{id}/start   <span class="code-comment"># Launch</span>
+<span class="code-keyword">POST</span> /enrich             <span class="code-comment"># Find email</span>
+<span class="code-keyword">POST</span> /enrich/bulk        <span class="code-comment"># Batch (500 max)</span></pre>
+                    </div>
+
+                    <h4 style="color: var(--text-muted); margin: 1.5rem 0 0.5rem;">Variables Available</h4>
+                    <div class="code-block" style="margin-top: 0; font-size: 0.8rem;">
+                        <pre><span class="code-comment"># Standard</span>
+{{firstName}} {{lastName}} {{email}}
+{{companyName}} {{phone}} {{linkedinUrl}}
+
+<span class="code-comment"># Custom (from lead data)</span>
+{{communityName}} {{memberCount}}
+{{calculatedLTV}} {{completionRate}}</pre>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Campaign Creation Flow</h4>
+                    <div class="terminal" style="margin-top: 0;">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                        </div>
+                        <div class="terminal-body" style="font-size: 0.75rem;">
+                            <div class="terminal-line"><span class="terminal-prompt">1.</span> Create campaign</div>
+                            <div class="terminal-line terminal-output">POST /campaigns {"name": "Skool AI Q2"}</div>
+                            <div class="terminal-line"><span class="terminal-prompt">2.</span> Add email sequence</div>
+                            <div class="terminal-line terminal-output">POST /campaigns/{id}/sequences</div>
+                            <div class="terminal-line"><span class="terminal-prompt">3.</span> Upload leads</div>
+                            <div class="terminal-line terminal-output">POST /campaigns/{id}/leads (batch)</div>
+                            <div class="terminal-line"><span class="terminal-prompt">4.</span> Start campaign</div>
+                            <div class="terminal-line terminal-output">POST /campaigns/{id}/start ✅</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; font-size: 0.85rem;">
+                        <strong style="color: var(--yellow);">⚠️ Rate Limit:</strong> 10 requests/second per team
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 10: Full Architecture -->
+    <section class="slide" id="slide-10">
+        <div class="slide-content">
+            <span class="eyebrow">Architecture</span>
+            <h2>How it all <span class="highlight">connects</span></h2>
+            <p class="subtitle">Agentic Beaver orchestrates skills, tools, and workflows.</p>
+            
+            <div class="integration-flow" style="margin: 2rem 0;">
+                <div class="integration-node">Skool</div>
+                <span class="integration-arrow">→</span>
+                <div class="integration-node highlight">Agentic Beaver</div>
+                <span class="integration-arrow">→</span>
+                <div class="integration-node">FullEnrich</div>
+                <span class="integration-arrow">→</span>
+                <div class="integration-node">Attio</div>
+                <span class="integration-arrow">→</span>
+                <div class="integration-node highlight">Agentic Beaver</div>
+                <span class="integration-arrow">→</span>
+                <div class="integration-node">Lemlist</div>
+            </div>
+
+            <div class="two-col">
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Workspace Structure</h4>
+                    <div class="code-block" style="margin-top: 0; font-size: 0.8rem;">
+                        <pre><span class="code-keyword">workspace/</span>
+├── <span class="code-variable">AGENTS.md</span>      <span class="code-comment"># Agent instructions</span>
+├── <span class="code-variable">MEMORY.md</span>      <span class="code-comment"># Pipeline state</span>
+│
+├── <span class="code-keyword">skills/</span>
+│   ├── <span class="code-function">cold-email/</span>
+│   │   ├── SKILL.md
+│   │   └── references/
+│   │       ├── frameworks.md
+│   │       └── examples.md
+│   ├── <span class="code-function">research/</span>
+│   │   └── SKILL.md
+│   └── <span class="code-function">outbound-sales/</span>
+│       └── SKILL.md
+│
+├── <span class="code-keyword">configs/</span>
+│   ├── .attio-config.json
+│   ├── .lemlist-config.json
+│   ├── .fullenrich-config.json
+│   └── .tavily-config.json
+│
+└── <span class="code-keyword">memory/</span>
+    └── lead-gen-workflow-session.md</pre>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-muted); margin-bottom: 1rem;">Key Benefits</h4>
+                    <div class="features-grid" style="grid-template-columns: 1fr; margin-top: 0; gap: 1rem;">
+                        <div class="feature-card" style="padding: 1rem;">
+                            <h4 style="margin-bottom: 0.25rem;">🧠 Persistent Memory</h4>
+                            <p style="font-size: 0.85rem;">Agent remembers campaign state, lead status, what's been sent.</p>
+                        </div>
+                        <div class="feature-card" style="padding: 1rem;">
+                            <h4 style="margin-bottom: 0.25rem;">🔌 Hot-Swappable Skills</h4>
+                            <p style="font-size: 0.85rem;">Drop a SKILL.md, agent learns new capabilities instantly.</p>
+                        </div>
+                        <div class="feature-card" style="padding: 1rem;">
+                            <h4 style="margin-bottom: 0.25rem;">⚡ Model Routing</h4>
+                            <p style="font-size: 0.85rem;">Opus for research, Sonnet for writing, Haiku for simple ops.</p>
+                        </div>
+                        <div class="feature-card" style="padding: 1rem;">
+                            <h4 style="margin-bottom: 0.25rem;">📱 Multi-Channel</h4>
+                            <p style="font-size: 0.85rem;">Command via Discord, Slack, Telegram — wherever you are.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 11: Live Demo -->
+    <section class="slide" id="slide-11">
+        <div class="slide-content" style="text-align: center;">
+            <span class="eyebrow">Live Demo</span>
+            <h2>Let's see it <span class="highlight">work</span></h2>
+            <p class="subtitle">Click any workflow to see how it works. Then watch the live demo.</p>
+            
+            <div class="demo-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; max-width: 1000px; margin: 3rem auto;">
+                <div class="demo-card" onclick="openModal('research')">
+                    <div class="demo-icon">🔍</div>
+                    <div class="demo-label">Research a Lead</div>
+                    <div class="demo-hint">Click to see workflow →</div>
+                </div>
+                <div class="demo-card" onclick="openModal('email')">
+                    <div class="demo-icon">✍️</div>
+                    <div class="demo-label">Write Cold Email</div>
+                    <div class="demo-hint">Click to see workflow →</div>
+                </div>
+                <div class="demo-card" onclick="openModal('crm')">
+                    <div class="demo-icon">📊</div>
+                    <div class="demo-label">CRM Integration</div>
+                    <div class="demo-hint">Click to see workflow →</div>
+                </div>
+                <div class="demo-card" onclick="openModal('pipeline')">
+                    <div class="demo-icon">🚀</div>
+                    <div class="demo-label">Full Pipeline</div>
+                    <div class="demo-hint">Click to see workflow →</div>
+                </div>
+                <div class="demo-card" onclick="openModal('scrape')">
+                    <div class="demo-icon">🕷️</div>
+                    <div class="demo-label">Scrape Leads</div>
+                    <div class="demo-hint">Click to see workflow →</div>
+                </div>
+            </div>
+            
+
+        </div>
+    </section>
+
+    <!-- Modal Overlays -->
+    <div class="modal-overlay" id="modal-research" onclick="closeModal('research')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('research')">×</button>
+            <h3>🔍 Research a Lead</h3>
+            <p class="modal-subtitle">Deep research workflow for hyper-personalized outreach</p>
+            <div class="workflow-diagram">
+                <div class="workflow-node start">📥 Lead Input</div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>Web Search (Tavily)</strong>
+                        <span>Search "{name} {company}" for background, news, interviews</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>YouTube Scrape (Apify)</strong>
+                        <span>Pull recent videos + transcripts from their channel</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>Content Analysis (Claude)</strong>
+                        <span>Extract values, philosophy, communication style, quotes</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>Hook Generation</strong>
+                        <span>Create 3+ personalized opener hooks with anti-patterns</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-node end">📄 Strategic Briefing</div>
+            </div>
+            <div class="modal-tools">
+                <span class="tool-tag">Tavily API</span>
+                <span class="tool-tag">Apify</span>
+                <span class="tool-tag">Claude</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-email" onclick="closeModal('email')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('email')">×</button>
+            <h3>✍️ Write Cold Email</h3>
+            <p class="modal-subtitle">Personalized cold copy in 75 words or less</p>
+            <div class="workflow-diagram">
+                <div class="workflow-node start">📄 Research Briefing</div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>Extract Hooks</strong>
+                        <span>Pull top 3 hooks and personalization points from briefing</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>Select Framework</strong>
+                        <span>PAS, QVC, BAB, or AIDA based on lead profile</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>Generate Copy</strong>
+                        <span>Write email with pattern-interrupt opener, specific value prop</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>Validate & Trim</strong>
+                        <span>Enforce 75 word max, single CTA, no fluff</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-node end">📧 Ready-to-Send Email</div>
+            </div>
+            <div class="modal-tools">
+                <span class="tool-tag">Claude</span>
+                <span class="tool-tag">Lemlist Variables</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-crm" onclick="closeModal('crm')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('crm')">×</button>
+            <h3>📊 CRM Integration</h3>
+            <p class="modal-subtitle">Sync enriched leads to Attio with full context</p>
+            <div class="workflow-diagram">
+                <div class="workflow-node start">📋 Enriched Lead Data</div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>Map Fields</strong>
+                        <span>Name, email, company, member count, LTV calculation</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>Check Duplicates</strong>
+                        <span>Query Attio for existing records by email</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>Create/Update Record</strong>
+                        <span>POST to Attio API with all lead attributes</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>Add to List</strong>
+                        <span>Assign to "💰 Skool Money" list with stage: Prospecting</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-node end">✅ Lead in CRM</div>
+            </div>
+            <div class="modal-tools">
+                <span class="tool-tag">Attio API</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-pipeline" onclick="closeModal('pipeline')">
+        <div class="modal-content wide" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('pipeline')">×</button>
+            <h3>🚀 Full Pipeline</h3>
+            <p class="modal-subtitle">End-to-end: from raw lead to sent email</p>
+            <div class="workflow-diagram horizontal">
+                <div class="pipeline-stage">
+                    <div class="stage-header">SCRAPE</div>
+                    <div class="stage-steps">
+                        <div class="mini-step">Skool scraper</div>
+                        <div class="mini-step">Extract profiles</div>
+                        <div class="mini-step">Save to CSV</div>
+                    </div>
+                    <div class="stage-tool">Python + Skool API</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-stage">
+                    <div class="stage-header">ENRICH</div>
+                    <div class="stage-steps">
+                        <div class="mini-step">Upload to FullEnrich</div>
+                        <div class="mini-step">Find emails (40%)</div>
+                        <div class="mini-step">Export results</div>
+                    </div>
+                    <div class="stage-tool">FullEnrich API</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-stage">
+                    <div class="stage-header">CRM</div>
+                    <div class="stage-steps">
+                        <div class="mini-step">Map fields</div>
+                        <div class="mini-step">Create records</div>
+                        <div class="mini-step">Assign to list</div>
+                    </div>
+                    <div class="stage-tool">Attio API</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-stage">
+                    <div class="stage-header">RESEARCH</div>
+                    <div class="stage-steps">
+                        <div class="mini-step">Web search</div>
+                        <div class="mini-step">YouTube scrape</div>
+                        <div class="mini-step">Generate briefing</div>
+                    </div>
+                    <div class="stage-tool">Tavily + Apify</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-stage">
+                    <div class="stage-header">WRITE</div>
+                    <div class="stage-steps">
+                        <div class="mini-step">Extract hooks</div>
+                        <div class="mini-step">Apply framework</div>
+                        <div class="mini-step">75 word copy</div>
+                    </div>
+                    <div class="stage-tool">Claude + Skill</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-stage">
+                    <div class="stage-header">SEND</div>
+                    <div class="stage-steps">
+                        <div class="mini-step">Create campaign</div>
+                        <div class="mini-step">Add sequence</div>
+                        <div class="mini-step">Launch</div>
+                    </div>
+                    <div class="stage-tool">Lemlist API</div>
+                </div>
+            </div>
+            <div class="modal-tools">
+                <span class="tool-tag">Agentic Beaver</span>
+                <span class="tool-tag">n8n</span>
+                <span class="tool-tag">Full Automation</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-scrape" onclick="closeModal('scrape')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('scrape')">×</button>
+            <h3>🕷️ Scrape Leads</h3>
+            <p class="modal-subtitle">Extract community owners from Skool</p>
+            <div class="workflow-diagram">
+                <div class="workflow-node start">🎯 Target Niche (e.g. "Money")</div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>Search Skool</strong>
+                        <span>Query category, paginate through results (5+ pages)</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>Extract Profiles</strong>
+                        <span>Community name, owner name, member count, pricing</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>Calculate LTV</strong>
+                        <span>Members × Price × Retention = Opportunity value</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-step-box">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>Export CSV</strong>
+                        <span>Save structured data for enrichment pipeline</span>
+                    </div>
+                </div>
+                <div class="workflow-arrow">↓</div>
+                <div class="workflow-node end">📊 357 Leads Extracted</div>
+            </div>
+            <div class="modal-tools">
+                <span class="tool-tag">Python</span>
+                <span class="tool-tag">Skool Scraper</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Get Started -->
+    <section class="slide cta-slide" id="slide-12">
+        <div class="glow" style="bottom: 20%; right: 10%;"></div>
+        <div class="slide-content">
+            <img src="beaver-logo.png" alt="Agentic Beaver" style="width: 100px; height: 100px; border-radius: 20px; margin-bottom: 1.5rem;">
+            <span class="eyebrow">Ready?</span>
+            <h2>Build your own<br><span class="highlight">AI teammate</span></h2>
+            <p class="subtitle">Join our community and start building today.</p>
+            
+            <div class="hero-cta" style="margin-top: 3rem;">
+                <a href="https://www.skool.com/agenticai" target="_blank" class="btn btn-primary">Join Community →</a>
+                <a href="https://akera.club" target="_blank" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="nav-hint">
+        <span class="key">↑</span>
+        <span class="key">↓</span>
+        or scroll
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+
+        document.getElementById('totalSlides').textContent = String(totalSlides).padStart(2, '0');
+
+        function updateSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            document.getElementById('currentSlide').textContent = String(index + 1).padStart(2, '0');
+            document.getElementById('progress').style.width = `${((index + 1) / totalSlides) * 100}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                updateSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                updateSlide(currentSlide);
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index - 1;
+            slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+            updateSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key >= '1' && e.key <= '9') {
+                const slideNum = parseInt(e.key);
+                if (slideNum <= totalSlides) {
+                    goToSlide(slideNum);
+                }
+            } else if (e.key === '0') {
+                goToSlide(10);
+            }
+        });
+
+        // Scroll detection
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(slides).indexOf(entry.target);
+                    currentSlide = index;
+                    updateSlide(currentSlide);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Modal functions
+        function openModal(id) {
+            document.getElementById('modal-' + id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById('modal-' + id).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Initial state
+        updateSlide(0);
+    </script>
+</body>
+</html>
